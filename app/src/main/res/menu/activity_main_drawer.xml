@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_saved_articles"
+        android:title="@string/nav_label_saved"
+        android:icon="@drawable/ic_saved"/>
+
+    <item
+        android:id="@+id/nav_settings"
+        android:title="@string/nav_label_settings"
+        android:icon="@drawable/ic_settings"/>
+
+    <item
+        android:id="@+id/nav_about"
+        android:title="@string/nav_label_about"
+        android:icon="@drawable/ic_info"/>
+
+
+</menu>
