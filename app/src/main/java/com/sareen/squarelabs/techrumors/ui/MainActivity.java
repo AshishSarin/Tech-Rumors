@@ -1,4 +1,4 @@
-package com.sareen.squarelabs.techrumors;
+package com.sareen.squarelabs.techrumors.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.sareen.squarelabs.techrumors.R;
 import com.sareen.squarelabs.techrumors.adapters.TechRumorsPageAdapter;
 
 public class MainActivity extends AppCompatActivity

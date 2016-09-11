@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_save"
+        android:title="@string/action_save_article_label"
+        android:icon="@drawable/ic_action_save"
+        app:showAsAction="always"/>
+
+    <item
         android:title="@string/action_share_label"
         android:icon="@drawable/ic_share"
         android:id="@+id/action_share_detail"

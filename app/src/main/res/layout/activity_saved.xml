@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,13 +7,20 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.sareen.squarelabs.techrumors.SavedActivity">
+    tools:context=".ui.SavedActivity">
 
-    <TextView
-        android:textColor="@android:color/black"
-        android:text="This feature is not available yet."
-        android:textSize="25sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <ListView
+        android:id="@+id/listview_saved_articles"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </ListView>
 
-</RelativeLayout>
+    <ProgressBar
+        android:id="@+id/empty_view_saved"
+        android:layout_gravity="center"
+        android:layout_width="45dp"
+        android:layout_height="45dp" />
+
+
+
+</FrameLayout>

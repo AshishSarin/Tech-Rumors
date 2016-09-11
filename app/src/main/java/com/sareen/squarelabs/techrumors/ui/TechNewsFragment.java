@@ -1,4 +1,4 @@
-package com.sareen.squarelabs.techrumors;
+package com.sareen.squarelabs.techrumors.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +25,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.sareen.squarelabs.techrumors.R;
+import com.sareen.squarelabs.techrumors.Utility.EndlessScrollListener;
+import com.sareen.squarelabs.techrumors.Utility.MyTechNews;
 import com.sareen.squarelabs.techrumors.Utility.Utility;
 import com.sareen.squarelabs.techrumors.adapters.TechNewsAdapter;
 

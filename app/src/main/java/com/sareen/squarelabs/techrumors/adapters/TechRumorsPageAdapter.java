@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.sareen.squarelabs.techrumors.TechNewsFragment;
+import com.sareen.squarelabs.techrumors.ui.TechNewsFragment;
 
 /**
  * Created by Ashish on 27-08-2016.

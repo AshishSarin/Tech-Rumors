@@ -1,4 +1,4 @@
-package com.sareen.squarelabs.techrumors;
+package com.sareen.squarelabs.techrumors.ui;
 
 import android.os.Bundle;
 

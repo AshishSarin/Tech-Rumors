@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
@@ -23,34 +23,39 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DetailActivity"
+            android:name=".ui.DetailActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".ui.MainActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="parentActivityName"
                 android:value=".MainActivty"/>
         </activity>
-        <activity android:name=".SavedActivity"
-            android:parentActivityName=".MainActivity">
+        <activity android:name=".ui.SavedActivity"
+            android:parentActivityName=".ui.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.sareen.squarelabs.techrumors.MainActivity" />
+                android:value=".ui.MainActivity" />
         </activity>
 
-        <activity android:name=".AboutActivity"
-            android:parentActivityName=".MainActivity">
+        <activity android:name=".ui.AboutActivity"
+            android:parentActivityName=".ui.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.sareen.squarelabs.techrumors.MainActivity" />
+                android:value=".ui.MainActivity" />
         </activity>
 
-        <activity android:name=".SettingsActivity"
-            android:parentActivityName=".MainActivity">
+        <activity android:name=".ui.SettingsActivity"
+            android:parentActivityName=".ui.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
+                android:value=".ui.MainActivity"/>
         </activity>
+
+        <provider
+            android:authorities="com.sareen.squarelabs.techrumors.provider"
+            android:name=".data.TechRumorsProvider"
+            android:enabled="true"/>
     </application>
 
 </manifest>

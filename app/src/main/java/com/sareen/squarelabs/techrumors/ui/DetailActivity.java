@@ -1,4 +1,4 @@
-package com.sareen.squarelabs.techrumors;
+package com.sareen.squarelabs.techrumors.ui;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -18,6 +18,7 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.sareen.squarelabs.techrumors.HTMLParser.HtmlRemoteImageGetter;
 import com.sareen.squarelabs.techrumors.HTMLParser.HtmlTextView;
+import com.sareen.squarelabs.techrumors.R;
 import com.sareen.squarelabs.techrumors.Utility.Config;
 import com.sareen.squarelabs.techrumors.Utility.TRDetail;
 import com.sareen.squarelabs.techrumors.Utility.Utility;
@@ -170,6 +171,11 @@ public class DetailActivity extends AppCompatActivity
         int itemId = item.getItemId();
         switch (itemId)
         {
+            case R.id.action_save:
+                Toast.makeText(this,
+                        "This article has been added to Saved Articles",
+                        Toast.LENGTH_SHORT).show();
+                return true;
             case R.id.action_share_detail:
                 Intent shareIntent = new Intent();
                 shareIntent.setAction(Intent.ACTION_SEND);

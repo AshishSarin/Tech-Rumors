@@ -1,4 +1,4 @@
-package com.sareen.squarelabs.techrumors;
+package com.sareen.squarelabs.techrumors.ui;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.widget.Toast;
+
+import com.sareen.squarelabs.techrumors.R;
 
 /**
  * Created by Ashish on 03-09-2016.

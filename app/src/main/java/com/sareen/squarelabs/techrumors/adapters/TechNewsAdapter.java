@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.sareen.squarelabs.techrumors.MyTechNews;
+import com.sareen.squarelabs.techrumors.Utility.MyTechNews;
 import com.sareen.squarelabs.techrumors.R;
 import com.squareup.picasso.Picasso;
 
@@ -23,23 +23,27 @@ public class TechNewsAdapter extends BaseAdapter
     private ArrayList<MyTechNews> newsArrayList;
     private Context mContext;
 
-    public TechNewsAdapter(Context context, List<MyTechNews> mNewList) {
+    public TechNewsAdapter(Context context, List<MyTechNews> mNewList)
+    {
         mContext = context;
         newsArrayList = (ArrayList<MyTechNews>)mNewList;
     }
 
     @Override
-    public int getCount() {
+    public int getCount()
+    {
         return newsArrayList.size();
     }
 
     @Override
-    public Object getItem(int position) {
+    public Object getItem(int position)
+    {
         return newsArrayList.get(position);
     }
 
     @Override
-    public long getItemId(int position) {
+    public long getItemId(int position)
+    {
         return position;
     }
 

@@ -1,7 +1,9 @@
-package com.sareen.squarelabs.techrumors;
+package com.sareen.squarelabs.techrumors.ui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.sareen.squarelabs.techrumors.R;
 
 public class AboutActivity extends AppCompatActivity {
 

@@ -29,7 +29,8 @@ import android.widget.TextView;
 public class HtmlLocalImageGetter implements Html.ImageGetter {
     TextView container;
 
-    public HtmlLocalImageGetter(TextView textView) {
+    public HtmlLocalImageGetter(TextView textView)
+    {
         this.container = textView;
     }
 
