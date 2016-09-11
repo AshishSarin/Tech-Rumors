@@ -3,7 +3,7 @@ package com.sareen.squarelabs.techrumors.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import com.sareen.squarelabs.techrumors.data.TechRumorsContract.SavedArticlesEntry;
+import com.sareen.squarelabs.techrumors.data.TechRumorsContract.SavedPostsEntry;
 
 /**
  * Created by Ashish on 11-09-2016.
@@ -25,20 +25,20 @@ public class TechRumorsHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db)
     {
-        final String SQL_CREATE_SAVED_ARTICLES_TABLE = "CREATE TABLE "
-                + SavedArticlesEntry.TABLE_NAME + " ("
-                + SavedArticlesEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
-                + SavedArticlesEntry.COLUMN_POST_TITLE + " TEXT NOT NULL"
+        final String SQL_CREATE_SAVED_POSTS_TABLE = "CREATE TABLE "
+                + SavedPostsEntry.TABLE_NAME + " ("
+                + SavedPostsEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
+                + SavedPostsEntry.COLUMN_POST_TITLE + " TEXT NOT NULL"
                 + ");";
 
-        db.execSQL(SQL_CREATE_SAVED_ARTICLES_TABLE);
+        db.execSQL(SQL_CREATE_SAVED_POSTS_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
         // TODO : Modify this so that user data is not lost when database schema is changed
-        db.execSQL("DROP TABLE IF EXISTS " + SavedArticlesEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + SavedPostsEntry.TABLE_NAME);
         onCreate(db);
     }
 }
