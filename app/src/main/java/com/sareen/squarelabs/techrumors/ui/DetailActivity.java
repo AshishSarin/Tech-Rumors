@@ -1,6 +1,7 @@
 package com.sareen.squarelabs.techrumors.ui;
 
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import com.sareen.squarelabs.techrumors.R;
 import com.sareen.squarelabs.techrumors.Utility.Config;
 import com.sareen.squarelabs.techrumors.Utility.TRDetail;
 import com.sareen.squarelabs.techrumors.Utility.Utility;
+import com.sareen.squarelabs.techrumors.data.TechRumorsContract.SavedPostsEntry;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -52,6 +54,7 @@ public class DetailActivity extends AppCompatActivity
     private String post_date;
     private String post_url;
     private String post_category;
+    private String post_content;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -104,6 +107,7 @@ public class DetailActivity extends AppCompatActivity
             }
             if(content != null)
             {
+                post_content = content;
                 ParseHTMLTask parseJSONTask = new ParseHTMLTask();
                 parseJSONTask.execute(content);
             }
@@ -172,9 +176,11 @@ public class DetailActivity extends AppCompatActivity
         switch (itemId)
         {
             case R.id.action_save:
+
                 Toast.makeText(this,
                         "This article has been added to Saved Articles",
                         Toast.LENGTH_SHORT).show();
+                savePost();
                 return true;
             case R.id.action_share_detail:
                 Intent shareIntent = new Intent();
@@ -186,6 +192,16 @@ public class DetailActivity extends AppCompatActivity
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+
+//    This method save the post in the database
+    private void savePost()
+    {
+        ContentValues values = new ContentValues();
+        values.put(SavedPostsEntry.COLUMN_POST_TITLE, post_title);
+        values.put(SavedPostsEntry.COLUMN_POST_CONTENT, post_content);
+        getContentResolver().insert(SavedPostsEntry.CONTENT_URI, values);
     }
 
     @Override

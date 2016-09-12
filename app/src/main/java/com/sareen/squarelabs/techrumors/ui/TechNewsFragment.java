@@ -53,7 +53,6 @@ public class TechNewsFragment extends Fragment
     private boolean isLoadNextPage = false;
     private int page;
     private String category;
-//    private ProgressDialog mProgressDialog;
     private View footerView;
     private ListView mTechNewsListView;
     private StringRequest mStringRequest;
@@ -232,10 +231,6 @@ public class TechNewsFragment extends Fragment
             // new category selected by user
             if(isFirstTime && !isRecentData)
             {
-                //showing progress dialog
-               /* mProgressDialog = ProgressDialog.show(getActivity(), "Loading...",
-                        "Loading..", false);
-                Log.d(LOG_TAG, "Progress Dialog: " + mProgressDialog.toString());*/
                 // clearing the adapter and setting the page = 1
                 page = 1;
                 mNewsList.clear();
@@ -377,19 +372,13 @@ public class TechNewsFragment extends Fragment
         // TODO create option for retry
         // Data fetching couldn't be completed
 
-        // We set the setLoadinFailed to true
+        // Setting the setLoadingFailed to true
         // so that endless scroll listener can detect
         // that loading is failed and then retries to query data
 
         EndlessScrollListener.setLoadingFailed();
 
         Log.d(LOG_TAG, "onRetry");
-        /*// Progress dialog is dismissed.
-        if(mProgressDialog != null && mProgressDialog.isShowing())
-        {
-            mProgressDialog.dismiss();
-            mProgressDialog = null;
-        }*/
 
         //isLoadNextPage set false so that same page is fetched on retry
 
@@ -437,15 +426,10 @@ public class TechNewsFragment extends Fragment
                 }
             }
 
-            /*if(mProgressDialog != null && mProgressDialog.isShowing())
-            {
-                // progress dialog is dismissed
-                mProgressDialog.dismiss();
-                mProgressDialog = null;
-            }*/
-            // At this step we are sure the current
+
+            // At this step it is sure that the current
             // page data has been fetched and shown to user.
-            // so we set isLoadNextPage to true
+            // so setting isLoadNextPage to true
             isLoadNextPage = true;
 
             // Check if this was first time loading

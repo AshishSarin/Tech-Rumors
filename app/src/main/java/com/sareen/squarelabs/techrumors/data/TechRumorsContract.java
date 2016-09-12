@@ -28,6 +28,9 @@ public class TechRumorsContract
         //Column with title of the saved post
         public static final String COLUMN_POST_TITLE = "post_title";
 
+        //Column with content of post in html format
+        public static final String COLUMN_POST_CONTENT = "post_content";
+
         // Declaring and defining uris for content provider
         // content_uri is defined as
         // "com.sareen.squarelabs.techrumors.provider/saved_posts"
