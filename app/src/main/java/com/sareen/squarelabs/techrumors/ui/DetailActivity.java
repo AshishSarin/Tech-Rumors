@@ -201,6 +201,8 @@ public class DetailActivity extends AppCompatActivity
         ContentValues values = new ContentValues();
         values.put(SavedPostsEntry.COLUMN_POST_TITLE, post_title);
         values.put(SavedPostsEntry.COLUMN_POST_CONTENT, post_content);
+        values.put(SavedPostsEntry.COLUMN_POST_AUTHOR, post_author);
+        values.put(SavedPostsEntry.COLUMN_POST_DATE_TIME, post_date);
         getContentResolver().insert(SavedPostsEntry.CONTENT_URI, values);
     }
 

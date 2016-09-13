@@ -31,6 +31,13 @@ public class TechRumorsContract
         //Column with content of post in html format
         public static final String COLUMN_POST_CONTENT = "post_content";
 
+        //Column with date and time
+        public static final String COLUMN_POST_DATE_TIME = "post_date_time";
+
+        //Column with post's author name
+        public static final String COLUMN_POST_AUTHOR = "post_author";
+
+
         // Declaring and defining uris for content provider
         // content_uri is defined as
         // "com.sareen.squarelabs.techrumors.provider/saved_posts"
