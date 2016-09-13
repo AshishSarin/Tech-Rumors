@@ -1,5 +1,6 @@
 package com.sareen.squarelabs.techrumors.ui;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -12,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.sareen.squarelabs.techrumors.R;
+import com.sareen.squarelabs.techrumors.Utility.Utility;
 import com.sareen.squarelabs.techrumors.adapters.SavedPostsAdapter;
 import com.sareen.squarelabs.techrumors.data.TechRumorsContract.SavedPostsEntry;
 
@@ -56,7 +58,13 @@ public class SavedActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-
+                Intent intent = new Intent(SavedActivity.this, DetailActivity.class);
+                Cursor c = mSavedAdapter.getCursor();
+                c.moveToPosition(position);
+                long post_db_id = c.getLong(c.getColumnIndex(SavedPostsEntry._ID));
+                intent.putExtra(Utility.POST_DB_ID, post_db_id);
+                intent.putExtra(Utility.CALLER_ACTIVITY, Utility.CALLER_SAVED_ACTIVITY);
+                startActivity(intent);
             }
         });
     }

@@ -134,6 +134,7 @@ public class TechNewsFragment extends Fragment
                 intent.putExtra(Utility.POST_DATE, date);
                 intent.putExtra(Utility.POST_URL, url);
                 intent.putExtra(Utility.POST_CATEGORY, cat);
+                intent.putExtra(Utility.CALLER_ACTIVITY, Utility.CALLER_MAIN_ACTIVITY);
                 startActivity(intent);
             }
         });

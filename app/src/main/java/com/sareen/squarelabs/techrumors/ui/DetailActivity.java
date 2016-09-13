@@ -3,9 +3,13 @@ package com.sareen.squarelabs.techrumors.ui;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -33,8 +37,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DetailActivity extends AppCompatActivity
+    implements LoaderManager.LoaderCallbacks<Cursor>
 {
 
+    private static final int DETAIL_SAVED_LOADER = 801;
     private static final int RECOVERY_REQUEST = 1;
 
 
@@ -56,6 +62,8 @@ public class DetailActivity extends AppCompatActivity
     private String post_category;
     private String post_content;
 
+    private int calling_code;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -66,69 +74,158 @@ public class DetailActivity extends AppCompatActivity
         ActionBar actionBar = getSupportActionBar();
         actionBar.setElevation(0f);
         initializeViews();
+        Intent intent = getIntent();
+        calling_code = intent.getIntExtra(Utility.CALLER_ACTIVITY, -1012);
+        if(calling_code == Utility.CALLER_MAIN_ACTIVITY)
+        {
+            // Calling activity was main
+            setUpFromMain();
+        }
+        else if(calling_code == Utility.CALLER_SAVED_ACTIVITY)
+        {
+            // Calling activity was saved
+            long _id = intent.getLongExtra(Utility.POST_DB_ID, 0L);
+            setupFromSaved(_id);
+        }
+        else
+        {
+            // TODO Handle error if detail activity
+            // was somehow called by some other unknown activity
+        }
 
-        long id = getIntent().getLongExtra(Utility.POST_ID, 0);
-       /* if(id != 0)
+    }
+
+    // This method is called when only id of post
+    // saved in database is sent from saved activity
+    // We query the data base and fill the view
+    // using the cursor loader
+    private void setupFromSaved(long _id)
+    {
+        setTitle(getString(R.string.app_name));
+        if(_id != 0L)
         {
-            fetchPost(id);
-        }*/
-        if(id != 0)
+            getSupportLoaderManager()
+                    .initLoader(DETAIL_SAVED_LOADER, null, this);
+        }
+        else
         {
-            Intent intent  = getIntent();
-            String content  = intent.getStringExtra(Utility.POST_CONTENT);
+            //TODO handle if the post db id is 0
+            // show some error message
+        }
+
+    }
+
+
+    /*Loader call backs for when data is loaded from the database*/
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args)
+    {
+        String[] projection = new String[]
+                {
+                        SavedPostsEntry._ID,
+                        SavedPostsEntry.COLUMN_POST_TITLE,
+                        SavedPostsEntry.COLUMN_POST_CONTENT,
+                        SavedPostsEntry.COLUMN_POST_AUTHOR,
+                        SavedPostsEntry.COLUMN_POST_DATE_TIME
+                };
+        long _id = getIntent().getLongExtra(Utility.POST_DB_ID, 0L);
+        String selection = SavedPostsEntry.TABLE_NAME + "." +
+                SavedPostsEntry._ID + " = ?";
+        String[] selectionArgs = {Long.toString(_id)};
+        return new CursorLoader
+                (
+                        this,
+                        SavedPostsEntry.CONTENT_URI,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null
+                );
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data)
+    {
+        if(data.moveToFirst())
+        {
+            post_title = data.getString(data.getColumnIndex(SavedPostsEntry.COLUMN_POST_TITLE));
+            post_content = data.getString(data.getColumnIndex(SavedPostsEntry.COLUMN_POST_CONTENT));
+            post_author = data.getString(data.getColumnIndex(SavedPostsEntry.COLUMN_POST_AUTHOR));
+            post_date = data.getString(data.getColumnIndex(SavedPostsEntry.COLUMN_POST_DATE_TIME));
+
+            detailTitle.setText(post_title);
+            detailAuthor.setText(post_date);
+            detailDate.setText(post_date);
+
+            ParseHTMLTask task = new ParseHTMLTask();
+            task.execute(post_content);
+
+        }
+        else
+        {
+            //ToDo: no data is returned, show some error message
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader)
+    {
+
+    }
+    // This method is called when data is sent
+    // from main activity in html form
+    // We set the title, date and author's name
+    // and then parse html sent from main activity
+    private void setUpFromMain()
+    {
+        long postId = getIntent().getLongExtra(Utility.POST_ID, 0);
+            /* if(id != 0)
+            {
+                fetchPost(id);
+            }*/
+        if (postId != 0) {
+            Intent intent = getIntent();
+            String content = intent.getStringExtra(Utility.POST_CONTENT);
             String title = intent.getStringExtra(Utility.POST_TITLE);
             String author_name = intent.getStringExtra(Utility.POST_AUTHOR);
             String date = intent.getStringExtra(Utility.POST_DATE);
             String url = intent.getStringExtra(Utility.POST_URL);
             String cat = intent.getStringExtra(Utility.POST_CATEGORY);
-            if(title != null)
-            {
+            if (title != null) {
                 post_title = title;
-            }
-            else
-            {
+            } else {
                 post_title = "Title Not Found  :(";
             }
-            if(author_name != null)
-            {
+            if (author_name != null) {
                 post_author = author_name;
-            }
-            else
-            {
+            } else {
                 post_author = "James";
             }
-            if(date != null)
-            {
+            if (date != null) {
                 post_date = date;
-            }
-            else
-            {
+            } else {
                 post_date = "";
             }
-            if(content != null)
-            {
+            if (content != null) {
                 post_content = content;
                 ParseHTMLTask parseJSONTask = new ParseHTMLTask();
-                parseJSONTask.execute(content);
+                parseJSONTask.execute(post_content);
             }
-            if(url != null)
-            {
+            if (url != null) {
                 post_url = url;
-            }
-            else
-            {
+            } else {
                 post_url = "Error finding post";
             }
-            if(cat != null)
-            {
+            if (cat != null) {
                 post_category = cat;
-            }
-            else
-            {
+            } else {
                 post_category = "home";
             }
+            setActivityTitle();
         }
+    }
 
+    private void setActivityTitle() {
         String activityTitle;
         if(post_category != null)
         {
@@ -167,7 +264,6 @@ public class DetailActivity extends AppCompatActivity
         }
 
         setTitle(activityTitle);
-
     }
 
     @Override
