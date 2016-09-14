@@ -16,7 +16,7 @@ public class TechRumorsHelper extends SQLiteOpenHelper {
     // Version of database
     // if schema of database is changed
     // then this needs to be increased.
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 4;
 
     public TechRumorsHelper(Context context)
     {
@@ -28,10 +28,12 @@ public class TechRumorsHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_SAVED_POSTS_TABLE = "CREATE TABLE "
                 + SavedPostsEntry.TABLE_NAME + " ("
                 + SavedPostsEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + SavedPostsEntry.COLUMN_POST_ID + " INTEGER NOT NULL, "
                 + SavedPostsEntry.COLUMN_POST_TITLE + " TEXT NOT NULL, "
                 + SavedPostsEntry.COLUMN_POST_CONTENT + " TEXT NOT NULL, "
                 + SavedPostsEntry.COLUMN_POST_AUTHOR + " TEXT NOT NULL, "
-                + SavedPostsEntry.COLUMN_POST_DATE_TIME + " TEXT NOT NULL"
+                + SavedPostsEntry.COLUMN_POST_DATE_TIME + " TEXT NOT NULL, "
+                + SavedPostsEntry.COLUMN_POST_IMAGES + " TEXT NOT NULL"
                 + ");";
 
         db.execSQL(SQL_CREATE_SAVED_POSTS_TABLE);

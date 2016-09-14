@@ -32,6 +32,9 @@ public class SavedActivity extends AppCompatActivity
                     SavedPostsEntry.COLUMN_POST_TITLE,
             };
 
+    private String sortOrder =
+            SavedPostsEntry._ID + " DESC";
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -79,7 +82,7 @@ public class SavedActivity extends AppCompatActivity
                         saveListProjection,
                         null,
                         null,
-                        null
+                        sortOrder
                 );
     }
 

@@ -25,6 +25,8 @@ public class TechRumorsContract
         // SavedPosts table name
         public static final String TABLE_NAME = "saved_posts";
 
+        public static final String COLUMN_POST_ID = "post_id";
+
         //Column with title of the saved post
         public static final String COLUMN_POST_TITLE = "post_title";
 
@@ -36,6 +38,9 @@ public class TechRumorsContract
 
         //Column with post's author name
         public static final String COLUMN_POST_AUTHOR = "post_author";
+
+        //Columns with post images local name
+        public static final String COLUMN_POST_IMAGES = "post_images";
 
 
         // Declaring and defining uris for content provider
