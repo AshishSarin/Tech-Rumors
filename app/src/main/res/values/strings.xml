@@ -15,4 +15,6 @@
     <string name="title_activity_settings">Settings</string>
     <string name="demo_title" />
     <string name="action_save_article_label">Save article</string>
+    <string name="action_remove_article_label">Remove Article</string>
+    <string name="activity_saved_label">Saved Articles</string>
 </resources>

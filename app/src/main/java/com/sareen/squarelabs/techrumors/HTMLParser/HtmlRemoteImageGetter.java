@@ -29,6 +29,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.sareen.squarelabs.techrumors.R;
+import com.sareen.squarelabs.techrumors.ui.DetailActivity;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -64,11 +65,13 @@ public class HtmlRemoteImageGetter implements ImageGetter {
         }
     }
 
-    public Drawable getDrawable(String source) {
+    public Drawable getDrawable(String source)
+    {
         UrlDrawable urlDrawable = new UrlDrawable();
 
         // get the actual source
-        ImageGetterAsyncTask asyncTask = new ImageGetterAsyncTask(urlDrawable, this, container, matchParentWidth);
+        ImageGetterAsyncTask asyncTask = new
+                ImageGetterAsyncTask(urlDrawable, this, container, matchParentWidth);
 
         asyncTask.execute(source);
 
@@ -133,12 +136,16 @@ public class HtmlRemoteImageGetter implements ImageGetter {
         /**
          * Get the Drawable from URL
          */
-        public Drawable fetchDrawable(String urlString) {
+        public Drawable fetchDrawable(String urlString)
+        {
             try {
                 Bitmap bitmap = Picasso.with(c).load(urlString)
                         .placeholder(R.drawable.nav_header)
                         .error(R.drawable.nav_header)
                         .get();
+
+//                 adding bitmap to detail list
+                DetailActivity.addBitmapToDetailList(bitmap);
                 /*InputStream is = fetch(urlString);
                 Drawable drawable = new BitmapDrawable(c.getResources(),
                         BitmapFactory.decodeStream(is));*/

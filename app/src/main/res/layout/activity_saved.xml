@@ -3,10 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".ui.SavedActivity">
 
     <ListView
@@ -15,11 +11,21 @@
         android:layout_height="match_parent">
     </ListView>
 
-    <ProgressBar
+    <TextView
         android:id="@+id/empty_view_saved"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:text="No articles found"
         android:layout_gravity="center"
-        android:layout_width="45dp"
-        android:layout_height="45dp" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ProgressBar
+        android:id="@+id/saved_progress_bar"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 
 

@@ -1,12 +1,8 @@
 package com.sareen.squarelabs.techrumors.ui;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SwitchCompat;
 import android.view.View;
-import android.widget.Toast;
 
 import com.sareen.squarelabs.techrumors.R;
 
@@ -26,7 +22,7 @@ public class SettingsActivity extends AppCompatActivity
 
     public void onSwitchNightMode(View view)
     {
-        SwitchCompat switchCompat = (SwitchCompat)view;
+        /*SwitchCompat switchCompat = (SwitchCompat)view;
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = prefs.edit();
         if(switchCompat.isChecked())
@@ -40,6 +36,6 @@ public class SettingsActivity extends AppCompatActivity
             editor.putBoolean(PREF_KEY_NIGHT_MODE, false);
             editor.commit();
             Toast.makeText(this, "Night Mode Off", Toast.LENGTH_SHORT).show();
-        }
+        }*/
     }
 }

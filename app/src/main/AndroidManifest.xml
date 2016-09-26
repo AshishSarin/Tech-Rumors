@@ -29,33 +29,36 @@
             android:screenOrientation="portrait">
             <meta-data
                 android:name="parentActivityName"
-                android:value=".MainActivty"/>
+                android:value=".MainActivty" />
         </activity>
-        <activity android:name=".ui.SavedActivity"
+        <activity
+            android:name=".ui.SavedActivity"
+            android:label="@string/activity_saved_label"
             android:parentActivityName=".ui.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.MainActivity" />
         </activity>
-
-        <activity android:name=".ui.AboutActivity"
+        <activity
+            android:name=".ui.AboutActivity"
             android:parentActivityName=".ui.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.MainActivity" />
         </activity>
-
-        <activity android:name=".ui.SettingsActivity"
+        <activity
+            android:name=".ui.SettingsActivity"
             android:parentActivityName=".ui.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.MainActivity"/>
+                android:value=".ui.MainActivity" />
         </activity>
 
         <provider
-            android:authorities="com.sareen.squarelabs.techrumors.provider"
             android:name=".data.TechRumorsProvider"
-            android:enabled="true"/>
+            android:authorities="com.sareen.squarelabs.techrumors.provider"
+            android:enabled="true" />
+
     </application>
 
 </manifest>

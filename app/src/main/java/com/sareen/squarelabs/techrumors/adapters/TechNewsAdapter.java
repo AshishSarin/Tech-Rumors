@@ -77,7 +77,7 @@ public class TechNewsAdapter extends BaseAdapter
         return convertView;
     }
 
-    public static class ViewHolder
+    private static class ViewHolder
     {
         public TextView title_text;
         public ImageView title_image;

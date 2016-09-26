@@ -2,6 +2,7 @@ package com.sareen.squarelabs.techrumors.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -17,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -53,7 +55,6 @@ public class TechNewsFragment extends Fragment
     private boolean isLoadNextPage = false;
     private int page;
     private String category;
-//    private ProgressDialog mProgressDialog;
     private View footerView;
     private ListView mTechNewsListView;
     private StringRequest mStringRequest;
@@ -135,6 +136,12 @@ public class TechNewsFragment extends Fragment
                 intent.putExtra(Utility.POST_DATE, date);
                 intent.putExtra(Utility.POST_URL, url);
                 intent.putExtra(Utility.POST_CATEGORY, cat);
+                intent.putExtra(Utility.CALLER_ACTIVITY, Utility.CALLER_MAIN_ACTIVITY);
+
+                ImageView imageView = (ImageView)view.findViewById(R.id.list_item_title_image);
+                BitmapDrawable bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
+                Utility.bitmap = bitmapDrawable.getBitmap();
+
                 startActivity(intent);
             }
         });
@@ -149,6 +156,7 @@ public class TechNewsFragment extends Fragment
                 This will ensure if there are any bugs because of which this method
                  is called twice for one scroll, data is only updated once.*/
 
+                Log.e("onScroll","called");
 
                 if(!isFirstTime)    // try to load next page only if data is loaded first time already
                 {
@@ -232,10 +240,6 @@ public class TechNewsFragment extends Fragment
             // new category selected by user
             if(isFirstTime && !isRecentData)
             {
-                //showing progress dialog
-               /* mProgressDialog = ProgressDialog.show(getActivity(), "Loading...",
-                        "Loading..", false);
-                Log.d(LOG_TAG, "Progress Dialog: " + mProgressDialog.toString());*/
                 // clearing the adapter and setting the page = 1
                 page = 1;
                 mNewsList.clear();
@@ -377,19 +381,13 @@ public class TechNewsFragment extends Fragment
         // TODO create option for retry
         // Data fetching couldn't be completed
 
-        // We set the setLoadinFailed to true
+        // Setting the setLoadingFailed to true
         // so that endless scroll listener can detect
         // that loading is failed and then retries to query data
 
         EndlessScrollListener.setLoadingFailed();
 
-        Log.d(LOG_TAG, "onRetry");
-        /*// Progress dialog is dismissed.
-        if(mProgressDialog != null && mProgressDialog.isShowing())
-        {
-            mProgressDialog.dismiss();
-            mProgressDialog = null;
-        }*/
+        Log.d(LOG_TAG, "onRetry: " + category);
 
         //isLoadNextPage set false so that same page is fetched on retry
 
@@ -437,15 +435,10 @@ public class TechNewsFragment extends Fragment
                 }
             }
 
-            /*if(mProgressDialog != null && mProgressDialog.isShowing())
-            {
-                // progress dialog is dismissed
-                mProgressDialog.dismiss();
-                mProgressDialog = null;
-            }*/
-            // At this step we are sure the current
+
+            // At this step it is sure that the current
             // page data has been fetched and shown to user.
-            // so we set isLoadNextPage to true
+            // so setting isLoadNextPage to true
             isLoadNextPage = true;
 
             // Check if this was first time loading
