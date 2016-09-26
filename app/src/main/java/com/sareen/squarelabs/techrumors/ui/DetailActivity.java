@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
+import com.sareen.squarelabs.techrumors.HTMLParser.HtmlLocalImageGetter;
 import com.sareen.squarelabs.techrumors.HTMLParser.HtmlRemoteImageGetter;
 import com.sareen.squarelabs.techrumors.HTMLParser.HtmlTextView;
 import com.sareen.squarelabs.techrumors.R;
@@ -40,6 +41,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -72,6 +74,13 @@ public class DetailActivity extends AppCompatActivity
 
     private int calling_code;
 
+    // This is a flag for determining
+    // if the detail activity is being called from SavedActivity
+    private boolean isSaved = false;
+    private ArrayList<String> imagePathList;
+
+
+
 
     // This list temporarily store the bitmap,
     // for if user asks for storing post in saved articles
@@ -83,6 +92,8 @@ public class DetailActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
+        isSaved = false;
+
         detailBitmapList = null;
 
         ActionBar actionBar = getSupportActionBar();
@@ -93,13 +104,15 @@ public class DetailActivity extends AppCompatActivity
         if(calling_code == Utility.CALLER_MAIN_ACTIVITY)
         {
             // Calling activity was main
+            isSaved = false;
             setUpFromMain();
         }
         else if(calling_code == Utility.CALLER_SAVED_ACTIVITY)
         {
             // Calling activity was saved
+            isSaved = true;
             long _id = intent.getLongExtra(Utility.POST_DB_ID, 0L);
-            setupFromSaved(_id);
+            setUpFromSaved(_id);
         }
         else
         {
@@ -113,7 +126,7 @@ public class DetailActivity extends AppCompatActivity
     // saved in database is sent from saved activity
     // We query the data base and fill the view
     // using the cursor loader
-    private void setupFromSaved(long _id)
+    private void setUpFromSaved(long _id)
     {
         setTitle(getString(R.string.app_name));
         if(_id != 0L)
@@ -142,6 +155,7 @@ public class DetailActivity extends AppCompatActivity
                         SavedPostsEntry.COLUMN_POST_CONTENT,
                         SavedPostsEntry.COLUMN_POST_AUTHOR,
                         SavedPostsEntry.COLUMN_POST_DATE_TIME,
+                        SavedPostsEntry.COLUMN_POST_TITLE_IMAGE,
                         SavedPostsEntry.COLUMN_POST_IMAGES
                 };
         long _id = getIntent().getLongExtra(Utility.POST_DB_ID, 0L);
@@ -168,6 +182,13 @@ public class DetailActivity extends AppCompatActivity
             post_content = data.getString(data.getColumnIndex(SavedPostsEntry.COLUMN_POST_CONTENT));
             post_author = data.getString(data.getColumnIndex(SavedPostsEntry.COLUMN_POST_AUTHOR));
             post_date = data.getString(data.getColumnIndex(SavedPostsEntry.COLUMN_POST_DATE_TIME));
+
+            String imagePathListStr = data.getString(data.getColumnIndex(SavedPostsEntry.COLUMN_POST_IMAGES));
+
+            if(!imagePathListStr.equals("NO_IMAGE"))
+            {
+                imagePathList = new ArrayList<String>(Arrays.asList(convertStringToArray(imagePathListStr)));
+            }
 
             detailTitle.setText(post_title);
             detailAuthor.setText(post_date);
@@ -311,27 +332,39 @@ public class DetailActivity extends AppCompatActivity
     {
         // storing images in file and getting paths
         ArrayList<String> bitmapsPathList = saveBitmaps();
-        String bitmapsPathStr = convertArrayListToString(bitmapsPathList);
+        String titleBitmapPath = saveTitleBitmap();
+        String bitmapsPathStr;
+        if(bitmapsPathList == null)
+        {
+            bitmapsPathStr = "NO_IMAGE";
+        }
+        else
+        {
+            bitmapsPathStr = convertArrayListToString(bitmapsPathList);
+        }
         ContentValues values = new ContentValues();
         values.put(SavedPostsEntry.COLUMN_POST_ID, post_id);
         values.put(SavedPostsEntry.COLUMN_POST_TITLE, post_title);
         values.put(SavedPostsEntry.COLUMN_POST_CONTENT, post_content);
         values.put(SavedPostsEntry.COLUMN_POST_AUTHOR, post_author);
         values.put(SavedPostsEntry.COLUMN_POST_DATE_TIME, post_date);
+        values.put(SavedPostsEntry.COLUMN_POST_TITLE_IMAGE, titleBitmapPath);
         values.put(SavedPostsEntry.COLUMN_POST_IMAGES, bitmapsPathStr);
         getContentResolver().insert(SavedPostsEntry.CONTENT_URI, values);
     }
 
+    // This method converts array list to string with comma
+    // as separator.
     private String convertArrayListToString(ArrayList<String> pathList)
     {
-        String seperator = "_,_";
+        String separator = "_,_";
         StringBuilder strBuilder = new StringBuilder("");
         for(int i=0; i<pathList.size(); i++)
         {
             strBuilder.append(pathList.get(i));
             if(i < pathList.size() - 1)
             {
-                strBuilder.append(seperator);
+                strBuilder.append(separator);
             }
         }
 
@@ -339,6 +372,8 @@ public class DetailActivity extends AppCompatActivity
 
     }
 
+    // This method return array from a string having
+    // comma as separator.
     private String[] convertStringToArray(String str)
     {
         String seperator = "_,_";
@@ -346,33 +381,76 @@ public class DetailActivity extends AppCompatActivity
         return arr;
     }
 
-    private ArrayList<String> saveBitmaps()
+    private String saveTitleBitmap()
     {
-        ArrayList<String> pathList = new ArrayList<String>();
         String fileName;
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
         File imageDir = cw.getDir("imageDir", Context.MODE_PRIVATE);
-        for(int i=0; i <detailBitmapList.size(); i++)
+        fileName = Long.toString(post_id) + "_title";
+        File imagePath = new File(imageDir, fileName + ".jpg");
+        FileOutputStream out = null;
+        try
         {
-            fileName = Long.toString(post_id) + Integer.toString(i + 1);
-            File imagePath = new File(imageDir, fileName + ".jpg");
-            FileOutputStream out = null;
+
+            out = new FileOutputStream(imagePath);
+            Utility.bitmap
+                    .compress(Bitmap.CompressFormat.JPEG, 100, out);
+
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
             try
             {
-
-                out = new FileOutputStream(imagePath);
-                detailBitmapList.get(i)
-                        .compress(Bitmap.CompressFormat.JPEG, 100, out);
-                pathList.add(fileName);
-
-                Log.d(LOG_TAG, "pathListSize: " + pathList.size());
+                if(out != null)
+                {
+                    out.close();
+                }
             }
             catch (IOException e)
             {
                 e.printStackTrace();
             }
-            finally
+        }
+        return fileName;
+    }
+
+    private ArrayList<String> saveBitmaps()
+    {
+        // This will contain local path of image
+        // currently it has name of files only
+        ArrayList<String> pathList = new ArrayList<String>();
+        String fileName;
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        File imageDir = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        if(detailBitmapList != null)
+        {
+            for(int i=0; i <detailBitmapList.size(); i++)
             {
+                // naming images as 3598598_1, 3598598_2, etc,
+                // where suffix is post_id and preceding integer the order of image
+                fileName = Long.toString(post_id) + Integer.toString(i + 1);
+                File imagePath = new File(imageDir, fileName + ".jpg");
+                FileOutputStream out = null;
+                try
+                {
+
+                    out = new FileOutputStream(imagePath);
+                    detailBitmapList.get(i)
+                            .compress(Bitmap.CompressFormat.JPEG, 100, out);
+                    pathList.add(fileName);
+
+                    Log.d(LOG_TAG, "pathListSize: " + pathList.size());
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+                finally
+                {
                     try
                     {
                         if(out != null)
@@ -384,6 +462,7 @@ public class DetailActivity extends AppCompatActivity
                     {
                         e.printStackTrace();
                     }
+                }
             }
         }
         Log.d(LOG_TAG, "fileName size: " + pathList.size());
@@ -396,6 +475,12 @@ public class DetailActivity extends AppCompatActivity
     {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.detail, menu);
+
+        if(isSaved)
+        {
+            MenuItem saveItem = menu.findItem(R.id.action_save);
+            saveItem.setVisible(false);
+        }
         return true;
     }
 
@@ -454,8 +539,19 @@ public class DetailActivity extends AppCompatActivity
                 result.content = result.content.replace
                         ("(adsbygoogle = window.adsbygoogle || []).push({});", "");
 
-                detailText.setHtml(result.content,
-                        new HtmlRemoteImageGetter(detailText, DetailActivity.this));
+                if(isSaved)
+                {
+                    // detail activity is called from saved activity,
+                    // so use local image getter
+                    Log.e(LOG_TAG, "isSaved");
+                    detailText.setHtml(result.content,
+                            new HtmlLocalImageGetter(detailText, imagePathList));
+                }
+                else
+                {
+                    detailText.setHtml(result.content,
+                            new HtmlRemoteImageGetter(detailText, DetailActivity.this));
+                }
 
                 // check if post has video url
                 if (!result.video_url.equals("") && result.video_url.contains("www.youtube.com"))

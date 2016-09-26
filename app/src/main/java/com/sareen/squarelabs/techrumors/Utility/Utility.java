@@ -1,5 +1,7 @@
 package com.sareen.squarelabs.techrumors.Utility;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by Ashish on 03-08-2016.
  */
@@ -14,6 +16,8 @@ public class Utility
     public static final String POST_DATE = "post_date";
     public static final String POST_URL = "post_url";
     public static final String POST_CATEGORY = "post_cat";
+
+    public static Bitmap bitmap;
 
 
     // These codes are passed to detail activity

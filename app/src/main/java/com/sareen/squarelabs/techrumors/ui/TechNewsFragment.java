@@ -2,6 +2,7 @@ package com.sareen.squarelabs.techrumors.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -17,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -135,6 +137,11 @@ public class TechNewsFragment extends Fragment
                 intent.putExtra(Utility.POST_URL, url);
                 intent.putExtra(Utility.POST_CATEGORY, cat);
                 intent.putExtra(Utility.CALLER_ACTIVITY, Utility.CALLER_MAIN_ACTIVITY);
+
+                ImageView imageView = (ImageView)view.findViewById(R.id.list_item_title_image);
+                BitmapDrawable bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
+                Utility.bitmap = bitmapDrawable.getBitmap();
+
                 startActivity(intent);
             }
         });

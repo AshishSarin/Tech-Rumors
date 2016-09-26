@@ -39,6 +39,9 @@ public class TechRumorsContract
         //Column with post's author name
         public static final String COLUMN_POST_AUTHOR = "post_author";
 
+        // Columns with title image local name
+        public static final String COLUMN_POST_TITLE_IMAGE = "post_title_image";
+
         //Columns with post images local name
         public static final String COLUMN_POST_IMAGES = "post_images";
 

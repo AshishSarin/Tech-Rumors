@@ -30,6 +30,7 @@ public class SavedActivity extends AppCompatActivity
             {
                     SavedPostsEntry._ID,
                     SavedPostsEntry.COLUMN_POST_TITLE,
+                    SavedPostsEntry.COLUMN_POST_TITLE_IMAGE
             };
 
     private String sortOrder =

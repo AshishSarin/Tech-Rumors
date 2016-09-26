@@ -144,9 +144,8 @@ public class HtmlRemoteImageGetter implements ImageGetter {
                         .error(R.drawable.nav_header)
                         .get();
 
-                // adding bitmap to detail list
+//                 adding bitmap to detail list
                 DetailActivity.addBitmapToDetailList(bitmap);
-
                 /*InputStream is = fetch(urlString);
                 Drawable drawable = new BitmapDrawable(c.getResources(),
                         BitmapFactory.decodeStream(is));*/
