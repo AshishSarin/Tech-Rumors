@@ -33,6 +33,7 @@
         </activity>
         <activity
             android:name=".ui.SavedActivity"
+            android:label="@string/activity_saved_label"
             android:parentActivityName=".ui.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

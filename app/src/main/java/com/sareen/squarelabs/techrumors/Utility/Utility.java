@@ -2,6 +2,9 @@ package com.sareen.squarelabs.techrumors.Utility;
 
 import android.graphics.Bitmap;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Created by Ashish on 03-08-2016.
  */
@@ -28,5 +31,17 @@ public class Utility
     // Constant for calling activity
     public static final String CALLER_ACTIVITY = "caller_activity";
 
+    public static String extractYTId(String ytUrl)
+    {
+        String vId = null;
+        Pattern pattern = Pattern.compile(
+                "^https?://.*(?:youtu.be/|v/|u/\\w/|embed/|watch?v=)([^#&?]*).*$",
+                Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(ytUrl);
+        if (matcher.matches()){
+            vId = matcher.group(1);
+        }
+        return vId;
+    }
 
 }

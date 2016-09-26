@@ -156,6 +156,7 @@ public class TechNewsFragment extends Fragment
                 This will ensure if there are any bugs because of which this method
                  is called twice for one scroll, data is only updated once.*/
 
+                Log.e("onScroll","called");
 
                 if(!isFirstTime)    // try to load next page only if data is loaded first time already
                 {
@@ -386,7 +387,7 @@ public class TechNewsFragment extends Fragment
 
         EndlessScrollListener.setLoadingFailed();
 
-        Log.d(LOG_TAG, "onRetry");
+        Log.d(LOG_TAG, "onRetry: " + category);
 
         //isLoadNextPage set false so that same page is fetched on retry
 

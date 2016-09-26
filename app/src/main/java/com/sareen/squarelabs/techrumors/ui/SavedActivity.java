@@ -6,11 +6,13 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.sareen.squarelabs.techrumors.R;
 import com.sareen.squarelabs.techrumors.Utility.Utility;
@@ -20,6 +22,7 @@ import com.sareen.squarelabs.techrumors.data.TechRumorsContract.SavedPostsEntry;
 public class SavedActivity extends AppCompatActivity
     implements LoaderManager.LoaderCallbacks<Cursor>
 {
+
 
     private static final int SAVED_POSTS_LOADER = -901;
     private ListView mSavedListView;
@@ -36,11 +39,15 @@ public class SavedActivity extends AppCompatActivity
     private String sortOrder =
             SavedPostsEntry._ID + " DESC";
 
+    private ProgressBar savedProgressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saved);
+
+        savedProgressBar = (ProgressBar)findViewById(R.id.saved_progress_bar);
 
         mSavedListView = (ListView)findViewById(R.id.listview_saved_articles);
         mSavedListView.setEmptyView(findViewById(R.id.empty_view_saved));
@@ -53,6 +60,23 @@ public class SavedActivity extends AppCompatActivity
 
         getSupportLoaderManager()
                 .initLoader(SAVED_POSTS_LOADER, null, this);
+
+
+        // remove elevation from action bar
+
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null)
+        {
+            actionBar.setElevation(0f);
+        }
+
+    }
+
+    @Override
+    protected void onResume()
+    {
+        getSupportLoaderManager().restartLoader(SAVED_POSTS_LOADER, null, this);
+        super.onResume();
     }
 
     private void setListViewOnItemClickListener()
@@ -76,6 +100,7 @@ public class SavedActivity extends AppCompatActivity
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args)
     {
+        savedProgressBar.setVisibility(View.VISIBLE);
         return new CursorLoader
                 (
                         this,
@@ -95,6 +120,7 @@ public class SavedActivity extends AppCompatActivity
             Log.d("SavedActivity", "null");
         }
         mSavedAdapter.swapCursor(data);
+        savedProgressBar.setVisibility(View.GONE);
     }
 
     @Override

@@ -42,8 +42,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class DetailActivity extends AppCompatActivity
     implements LoaderManager.LoaderCallbacks<Cursor>
@@ -79,12 +77,13 @@ public class DetailActivity extends AppCompatActivity
     private boolean isSaved = false;
     private ArrayList<String> imagePathList;
 
-
+    private long post_db_id = -1;
 
 
     // This list temporarily store the bitmap,
     // for if user asks for storing post in saved articles
     private static ArrayList<Bitmap> detailBitmapList;
+    private boolean showSaveOption;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -93,6 +92,7 @@ public class DetailActivity extends AppCompatActivity
         setContentView(R.layout.activity_detail);
 
         isSaved = false;
+        showSaveOption = true; // keeping it true initially
 
         detailBitmapList = null;
 
@@ -105,14 +105,16 @@ public class DetailActivity extends AppCompatActivity
         {
             // Calling activity was main
             isSaved = false;
+            showSaveOption = true;      // show save option
             setUpFromMain();
         }
         else if(calling_code == Utility.CALLER_SAVED_ACTIVITY)
         {
             // Calling activity was saved
             isSaved = true;
-            long _id = intent.getLongExtra(Utility.POST_DB_ID, 0L);
-            setUpFromSaved(_id);
+            showSaveOption = false;       // show saved option
+            post_db_id = intent.getLongExtra(Utility.POST_DB_ID, 0L);
+            setUpFromSaved(post_db_id);
         }
         else
         {
@@ -308,12 +310,28 @@ public class DetailActivity extends AppCompatActivity
         switch (itemId)
         {
             case R.id.action_save:
-
-                Toast.makeText(this,
-                        "This article has been added to Saved Articles",
-                        Toast.LENGTH_SHORT).show();
-                savePost();
+                if(showSaveOption)
+                {
+                    new SavePostTask().execute();
+                }
+                else
+                {
+                    if(!isSaved)
+                    {
+                        // This activity was started form main activity
+                        Toast.makeText(this,
+                                "Already added to Saved Articles", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        // remove the article
+                        Toast.makeText(this, "Removed", Toast.LENGTH_SHORT).show();
+                        showSaveOption = true;
+                        removeArticle();
+                    }
+                }
                 return true;
+
             case R.id.action_share_detail:
                 Intent shareIntent = new Intent();
                 shareIntent.setAction(Intent.ACTION_SEND);
@@ -328,30 +346,8 @@ public class DetailActivity extends AppCompatActivity
 
 
 //    This method save the post in the database
-    private void savePost()
-    {
-        // storing images in file and getting paths
-        ArrayList<String> bitmapsPathList = saveBitmaps();
-        String titleBitmapPath = saveTitleBitmap();
-        String bitmapsPathStr;
-        if(bitmapsPathList == null)
-        {
-            bitmapsPathStr = "NO_IMAGE";
-        }
-        else
-        {
-            bitmapsPathStr = convertArrayListToString(bitmapsPathList);
-        }
-        ContentValues values = new ContentValues();
-        values.put(SavedPostsEntry.COLUMN_POST_ID, post_id);
-        values.put(SavedPostsEntry.COLUMN_POST_TITLE, post_title);
-        values.put(SavedPostsEntry.COLUMN_POST_CONTENT, post_content);
-        values.put(SavedPostsEntry.COLUMN_POST_AUTHOR, post_author);
-        values.put(SavedPostsEntry.COLUMN_POST_DATE_TIME, post_date);
-        values.put(SavedPostsEntry.COLUMN_POST_TITLE_IMAGE, titleBitmapPath);
-        values.put(SavedPostsEntry.COLUMN_POST_IMAGES, bitmapsPathStr);
-        getContentResolver().insert(SavedPostsEntry.CONTENT_URI, values);
-    }
+
+
 
     // This method converts array list to string with comma
     // as separator.
@@ -475,13 +471,22 @@ public class DetailActivity extends AppCompatActivity
     {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.detail, menu);
-
-        if(isSaved)
-        {
-            MenuItem saveItem = menu.findItem(R.id.action_save);
-            saveItem.setVisible(false);
-        }
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu)
+    {
+        MenuItem saveItem = menu.findItem(R.id.action_save);
+        if(showSaveOption)
+        {
+            saveItem.setIcon(R.drawable.ic_action_save);
+        }
+        else
+        {
+            saveItem.setIcon(R.drawable.ic_action_saved);
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     private void initializeViews()
@@ -493,19 +498,19 @@ public class DetailActivity extends AppCompatActivity
     }
 
 
-
-
-    public static String extractYTId(String ytUrl) {
-        String vId = null;
-        Pattern pattern = Pattern.compile(
-                "^https?://.*(?:youtu.be/|v/|u/\\w/|embed/|watch?v=)([^#&?]*).*$",
-                Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(ytUrl);
-        if (matcher.matches()){
-            vId = matcher.group(1);
-        }
-        return vId;
+    // method for removing article from database
+    private void removeArticle()
+    {
+        String selection = SavedPostsEntry.TABLE_NAME + "." +
+                SavedPostsEntry._ID + " = ?";
+        String[] selectionArgs = {Long.toString(post_db_id)};
+        getContentResolver().delete(SavedPostsEntry.CONTENT_URI,
+                selection, selectionArgs);
+        finish();
     }
+
+
+
 
 
     public class ParseHTMLTask extends AsyncTask<String, Void, TRDetail>
@@ -568,8 +573,9 @@ public class DetailActivity extends AppCompatActivity
                         public void onInitializationSuccess(YouTubePlayer.Provider provider,
                                                             YouTubePlayer player, boolean wasRestored)
                         {
-                            if (!wasRestored) {
-                                player.cueVideo(extractYTId(youtube_video_url));
+                            if (!wasRestored)
+                            {
+                                player.cueVideo(Utility.extractYTId(youtube_video_url));
                             }
                         }
 
@@ -632,5 +638,149 @@ public class DetailActivity extends AppCompatActivity
         Log.d(LOG_TAG, "addBitmapTopDetailList");
         detailBitmapList.add(bitmap);
         Log.d(LOG_TAG, "" + detailBitmapList.size());
+    }
+
+
+
+    /* Below code snipped is for determining parent activity
+    * according to from which activity DetailActivity was being
+    * called.*/
+
+    // Override BOTH getSupportParentActivityIntent() AND getParentActivityIntent() because
+    // if your device is running on API 11+ it will call the native
+    // getParentActivityIntent() method instead of the support version.
+    // The docs do **NOT** make this part clear and it is important!
+
+    @Override
+    public Intent getSupportParentActivityIntent()
+    {
+        return getParentActivityIntentImpl();
+    }
+
+    @Override
+    public Intent getParentActivityIntent()
+    {
+        return getParentActivityIntentImpl();
+    }
+
+    private Intent getParentActivityIntentImpl()
+    {
+        Intent i;
+
+        // Here you need to do some logic to determine from which Activity you came.
+        // example: you could pass a variable through your Intent extras and check that.
+        if (isSaved)
+        {
+            i = new Intent(this, SavedActivity.class);
+            // set any flags or extras that you need.
+            // If you are reusing the previous Activity (i.e. bringing it to the top
+            // without re-creating a new instance) set these flags:
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            // if you are re-using the parent Activity you may not need to set any extras
+        }
+        else
+        {
+            i = new Intent(this, MainActivity.class);
+            // same comments as above
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        }
+
+        return i;
+    }
+
+    public  class SavePostTask extends AsyncTask<Void, Void, Boolean>
+    {
+        @Override
+        protected void onPreExecute()
+        {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(Boolean saved)
+        {
+            if(!saved)
+            {
+                showToast("Already added to saved articles");
+            }
+            else
+            {
+                showToast("This article has been added to Saved Articles");
+            }
+            showSaveOption = false;
+            invalidateOptionsMenu();
+        }
+
+
+        @Override
+        protected Boolean doInBackground(Void... params)
+        {
+
+            return savePost();
+        }
+
+        private boolean savePost()
+        {
+            if(isSavedBefore())
+            {
+                return false;
+
+            }
+            else
+            {
+                // storing images in file and getting paths
+                ArrayList<String> bitmapsPathList = saveBitmaps();
+                String titleBitmapPath = saveTitleBitmap();
+                String bitmapsPathStr;
+                if(bitmapsPathList == null)
+                {
+                    bitmapsPathStr = "NO_IMAGE";
+                }
+                else
+                {
+                    bitmapsPathStr = convertArrayListToString(bitmapsPathList);
+                }
+                ContentValues values = new ContentValues();
+                values.put(SavedPostsEntry.COLUMN_POST_ID, post_id);
+                values.put(SavedPostsEntry.COLUMN_POST_TITLE, post_title);
+                values.put(SavedPostsEntry.COLUMN_POST_CONTENT, post_content);
+                values.put(SavedPostsEntry.COLUMN_POST_AUTHOR, post_author);
+                values.put(SavedPostsEntry.COLUMN_POST_DATE_TIME, post_date);
+                values.put(SavedPostsEntry.COLUMN_POST_TITLE_IMAGE, titleBitmapPath);
+                values.put(SavedPostsEntry.COLUMN_POST_IMAGES, bitmapsPathStr);
+                getContentResolver().insert(SavedPostsEntry.CONTENT_URI, values);
+                return true;
+            }
+
+        }
+
+        private boolean isSavedBefore()
+        {
+            Log.e("isSavedBefore", "called");
+            String selection  = SavedPostsEntry.TABLE_NAME + "."
+                    + SavedPostsEntry.COLUMN_POST_ID + " = ?";
+            String[] selectionArgs = {Long.toString(post_id)};
+            String[] projection =
+                    {
+                            SavedPostsEntry._ID,
+                            SavedPostsEntry.COLUMN_POST_ID
+                    };
+            Cursor cursor = DetailActivity.this.getContentResolver().query
+                    (SavedPostsEntry.CONTENT_URI, projection, selection, selectionArgs,
+                            null);
+            if(cursor.moveToFirst())
+            {
+                if(post_id == cursor.getLong(cursor.getColumnIndex(SavedPostsEntry.COLUMN_POST_ID)))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    public void showToast(String msg)
+    {
+        Toast.makeText(DetailActivity.this, msg, Toast.LENGTH_SHORT).show();
     }
 }
