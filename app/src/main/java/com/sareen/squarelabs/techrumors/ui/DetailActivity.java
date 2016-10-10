@@ -83,7 +83,7 @@ public class DetailActivity extends AppCompatActivity
     private long post_db_id = -1;
 
 
-    // This list temporarily store the bitmap,
+    // This list temporarily store the postTitleBitmap,
     // for if user asks for storing post in saved articles
     private static ArrayList<Bitmap> detailBitmapList;
     private boolean showSaveOption;
@@ -405,7 +405,7 @@ public class DetailActivity extends AppCompatActivity
         {
 
             out = new FileOutputStream(imagePath);
-            Utility.bitmap
+            Utility.postTitleBitmap
                     .compress(Bitmap.CompressFormat.JPEG, 100, out);
 
         }

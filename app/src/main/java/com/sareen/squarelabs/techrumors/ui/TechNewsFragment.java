@@ -39,6 +39,9 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -154,7 +157,7 @@ public class TechNewsFragment extends Fragment
 
                 ImageView imageView = (ImageView)view.findViewById(R.id.list_item_title_image);
                 BitmapDrawable bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
-                Utility.bitmap = bitmapDrawable.getBitmap();
+                Utility.postTitleBitmap = bitmapDrawable.getBitmap();
 
                 startActivity(intent);
             }
@@ -307,7 +310,6 @@ public class TechNewsFragment extends Fragment
                 // user has selected some category
                 builtUri = Uri.parse("http://techrumors.org/api/get_category_posts").buildUpon()
                         .appendQueryParameter(CATEGORY_PARAM, category)
-//                        .appendQueryParameter(CATEGORY_PARAM, "pokemon-go-hacks")
                         .appendQueryParameter(PAGE_PARAM, Integer.toString(currentPage))
                         .appendQueryParameter(COUNT_PARAM, Integer.toString(posts_count))
                         .appendQueryParameter(INCLUDE_PARAM, include)
@@ -512,15 +514,15 @@ public class TechNewsFragment extends Fragment
                                 newFirstPostId = id;
                             }
                             String title = StringEscapeUtils.unescapeXml(post.getString(TR_TITLE));
+                            String content = post.getString(TR_POST_CONTENT);
                             String image = post.optString(TR_THUMBNAIL);
-                            if (image.equals(""))
+                            if (image == null || image.equals("") || image.equals("null"))// check if thumbnail url is empty
                             {
-                                image = "null";
+                                // thumbnail url is empty
+                                image = getThumbailUrl(content);
                             }
 
                             String post_url = post.getString("url");
-
-                            String content = post.getString(TR_POST_CONTENT);
 
                             JSONObject author_json = post.getJSONObject(TR_POST_AUTHOR);
                             String author_name = author_json.getString(TR_POST_AUTHOR_NAME);
@@ -558,12 +560,17 @@ public class TechNewsFragment extends Fragment
                     {
                         JSONObject post = postsArray.getJSONObject(i);
                         String title = StringEscapeUtils.unescapeXml(post.getString(TR_TITLE));
-                        String image = post.optString(TR_THUMBNAIL);
-                        if (image.equals("")) {
-                            image = "null";
-                        }
-                        long id = post.getLong(TR_POST_ID);
                         String content = post.getString(TR_POST_CONTENT);
+                        String image = post.optString(TR_THUMBNAIL);
+                        if (image == null || image.equals("") || image.equals("null"))
+                        {
+                            // thumbnail url is empty
+                            image = getThumbailUrl(content);
+
+                        }
+
+                        long id = post.getLong(TR_POST_ID);
+
 
                         JSONObject author_json = post.getJSONObject(TR_POST_AUTHOR);
                         String author_name = author_json.getString(TR_POST_AUTHOR_NAME);
@@ -599,6 +606,40 @@ public class TechNewsFragment extends Fragment
                 Log.e(LOG_TAG, e.getMessage());
             }
             return null;
+        }
+
+        private String getThumbailUrl(String content)
+        {
+            Log.d(LOG_TAG, "getThumbnaulUrl");
+            String thumbnailUrl = "null";
+            Document doc = Jsoup.parse(content);
+
+            // try to get the first image in post (if present)
+            Elements img = doc.select("img");
+            if(img.size() != 0)
+            {
+                Log.d(LOG_TAG, "img size: " + img.size());
+                // size of img element is not zero
+                // i.e. there is atleast one image in this post
+                thumbnailUrl = img.get(0).attr("src");
+            }
+            else
+            {
+                Log.d(LOG_TAG, "img size: " + img.size());
+                // img size was zero
+                // it means no image in this post
+                // try to fetch thumbnail of video(if present)
+                Elements iframes = doc.select("iframe");
+                Log.d(LOG_TAG, "iframe size: " + iframes.size());
+                if(iframes.size() != 0)         // check if there is a video in the post
+                {
+                    // video is present in post
+                    String videoId = Utility.extractYTId(iframes.get(0).attr("src"));
+                    thumbnailUrl = "http://img.youtube.com/vi/" + videoId +"/default.jpg";
+                    Log.e(LOG_TAG, "videoUrl: " + thumbnailUrl);
+                }
+            }
+            return thumbnailUrl;
         }
     }
 
