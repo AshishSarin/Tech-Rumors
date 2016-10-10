@@ -557,9 +557,12 @@ public class DetailActivity extends AppCompatActivity
                 //set post date
                 detailDate.setText(post_date);
 
+                Log.e(LOG_TAG, result.content);
+
                 result.content = result.content.replace
                         ("(adsbygoogle = window.adsbygoogle || []).push({});", "");
 
+                Log.e(LOG_TAG, result.content);
                 if(isSaved)
                 {
                     // detail activity is called from saved activity,
