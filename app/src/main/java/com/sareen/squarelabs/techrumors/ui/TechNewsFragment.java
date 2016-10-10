@@ -636,7 +636,6 @@ public class TechNewsFragment extends Fragment
                     // video is present in post
                     String videoId = Utility.extractYTId(iframes.get(0).attr("src"));
                     thumbnailUrl = "http://img.youtube.com/vi/" + videoId +"/default.jpg";
-                    Log.e(LOG_TAG, "videoUrl: " + thumbnailUrl);
                 }
             }
             return thumbnailUrl;
