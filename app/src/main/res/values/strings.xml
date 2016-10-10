@@ -17,4 +17,7 @@
     <string name="action_save_article_label">Save article</string>
     <string name="action_remove_article_label">Remove Article</string>
     <string name="activity_saved_label">Saved Articles</string>
+    <string name="banner_ad_unit_id_main">ca-app-pub-2077732222500987/7777799753</string>
+    <string name="banner_ad_unit_id_saved">ca-app-pub-2077732222500987/6770241358</string>
+    <string name="banner_ad_unit_id_detail">ca-app-pub-2077732222500987/6072237357</string>
 </resources>

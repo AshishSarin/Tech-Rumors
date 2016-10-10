@@ -1,5 +1,6 @@
 package com.sareen.squarelabs.techrumors.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
@@ -22,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -85,6 +87,14 @@ public class TechNewsFragment extends Fragment
     }
 
     @Override
+    public void onAttach(Activity activity)
+    {
+        super.onAttach(activity);
+        mainActivity = (MainActivity)activity;
+    }
+
+    MainActivity mainActivity;
+    @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
@@ -101,7 +111,7 @@ public class TechNewsFragment extends Fragment
 
 
         /*Code for adding footer view*/
-        footerView = inflater.inflate(R.layout.loading_footer_view,null, false);
+        footerView = inflater.inflate(R.layout.loading_footer_view, mTechNewsListView, false);
         mTechNewsListView.addFooterView(footerView);
         // setting up the empty view
         mTechNewsListView.setEmptyView(rootView.findViewById(R.id.empty_view));
@@ -119,6 +129,10 @@ public class TechNewsFragment extends Fragment
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
                 // Open detail activity
+                if(footerView == view)
+                {
+                    return;
+                }
                 MyTechNews item = (MyTechNews)mNewsAdapter.getItem(position);
                 //TODO: Do the below stuff usng a single object using parceable
                 long post_id = item.post_id;
@@ -146,11 +160,13 @@ public class TechNewsFragment extends Fragment
             }
         });
 
+
         mTechNewsListView.setOnScrollListener(new EndlessScrollListener()
         {
             @Override
             public boolean onLoadMore(int pg, int totalItemsCount)
             {
+
                 /*In this method updateTechNewsData will be called only
                 if either the loading has failed or next page has been requested.
                 This will ensure if there are any bugs because of which this method
@@ -276,7 +292,7 @@ public class TechNewsFragment extends Fragment
             int currentPage = (isRecentData) ? recentPage : page;
             if (category.equals("home"))
             {
-                builtUri = Uri.parse("http://www.techrumors.org/api/get_posts").buildUpon()
+                builtUri = Uri.parse("http://techrumors.org/api/get_posts").buildUpon()
                         .appendQueryParameter(PAGE_PARAM, Integer.toString(currentPage))
                         .appendQueryParameter(COUNT_PARAM, Integer.toString(posts_count))
                         .appendQueryParameter(INCLUDE_PARAM, include)
@@ -289,8 +305,9 @@ public class TechNewsFragment extends Fragment
             else
             {
                 // user has selected some category
-                builtUri = Uri.parse("http://www.techrumors.org/api/get_category_posts").buildUpon()
+                builtUri = Uri.parse("http://techrumors.org/api/get_category_posts").buildUpon()
                         .appendQueryParameter(CATEGORY_PARAM, category)
+//                        .appendQueryParameter(CATEGORY_PARAM, "pokemon-go-hacks")
                         .appendQueryParameter(PAGE_PARAM, Integer.toString(currentPage))
                         .appendQueryParameter(COUNT_PARAM, Integer.toString(posts_count))
                         .appendQueryParameter(INCLUDE_PARAM, include)
@@ -336,6 +353,9 @@ public class TechNewsFragment extends Fragment
                                 retry();
                             }
                         });
+                mStringRequest.setRetryPolicy(new DefaultRetryPolicy
+                        (60000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                 RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
                 requestQueue.add(mStringRequest);
             }
@@ -563,7 +583,7 @@ public class TechNewsFragment extends Fragment
                                 (title, image, id, content, author_name, date, post_url, category);
                         mNewsList.add(myTechNews);
 
-                        //TODO Later refractor the code to use data instead of id
+                        //TODO Later refractor the code to use date instead of id
                         /*This code is to get id of the first post*/
                         if (normalIterationCount == 1)
                         {
