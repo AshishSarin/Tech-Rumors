@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "633884065302",
+    "firebase_url": "https://techrumors-139902.firebaseio.com",
+    "project_id": "techrumors-139902",
+    "storage_bucket": "techrumors-139902.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:633884065302:android:1e92ee19e903e412",
+        "android_client_info": {
+          "package_name": "com.sareen.squarelabs.techrumors"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "633884065302-lj6b8nht73ughosoei71guhdsmam5fkv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sareen.squarelabs.techrumors",
+            "certificate_hash": "F1A99462F23DF5EECED254B068D5BA16F3A4AFF8"
+          }
+        },
+        {
+          "client_id": "633884065302-ivh7ep8ncbvqdfd8qfegm8dj85u0qm2b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQCNkhS25Ia4X23pGEwS7cdOk1aSGhYY8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "633884065302-ivh7ep8ncbvqdfd8qfegm8dj85u0qm2b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

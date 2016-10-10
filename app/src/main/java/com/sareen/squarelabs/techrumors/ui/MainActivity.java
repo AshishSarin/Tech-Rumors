@@ -12,7 +12,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.sareen.squarelabs.techrumors.R;
 import com.sareen.squarelabs.techrumors.adapters.TechRumorsPageAdapter;
 
@@ -23,15 +27,28 @@ public class MainActivity extends AppCompatActivity
     private TechRumorsPageAdapter mPageAdapter;
     private ViewPager mViewPager;
     private TabLayout tabLayout;
-
+    private Toolbar toolbar;
+    private View navHeader;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        MobileAds.initialize
+                (getApplicationContext(),
+                        "ca-app-pub-2077732222500987~6301066550");
+
+        AdView mAdView = (AdView) findViewById(R.id.adView_main);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
+//        AdRequest adRequest = new AdRequest.Builder().build();
+//        mAdView.loadAd(adRequest);
+
         mPageAdapter = new TechRumorsPageAdapter(getSupportFragmentManager());
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
 
@@ -45,6 +62,8 @@ public class MainActivity extends AppCompatActivity
                 (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
+
+        navHeader = navigationView.getHeaderView(0);
 
 
 
@@ -62,7 +81,35 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onPageSelected(int position)
             {
+                /*int themeColor;
+                switch (position)
+                {
+                    case 0:
+                        themeColor = ContextCompat.getColor(MainActivity.this, R.color.colorPrimary);
+                        break;
+                    case 1:
+                        themeColor = ContextCompat.getColor(MainActivity.this, R.color.teal);
+                        break;
+                    case 2:
+                        themeColor = ContextCompat.getColor(MainActivity.this, R.color.red);
+                        break;
+                    case 3:
+                        themeColor = ContextCompat.getColor(MainActivity.this, R.color.brown);
+                        break;
+                    case 4:
+                        themeColor = ContextCompat.getColor(MainActivity.this, R.color.purple);
+                        break;
+                    case 5:
+                        themeColor = ContextCompat.getColor(MainActivity.this, R.color.light_blue);
+                        break;
+                    default:
+                        themeColor = ContextCompat.getColor(MainActivity.this, R.color.colorPrimary);
 
+
+                }
+                toolbar.setBackgroundColor(themeColor);
+                tabLayout.setBackgroundColor(themeColor);
+                navHeader.setBackgroundColor(themeColor);*/
             }
 
             @Override
@@ -74,14 +121,8 @@ public class MainActivity extends AppCompatActivity
         tabLayout = (TabLayout)findViewById(R.id.main_tablayout);
         tabLayout.setupWithViewPager(mViewPager);
 
-        
-        setUpTabIcons();
-
     }
 
-    private void setUpTabIcons()
-    {
-    }
 
     @Override
     public void onBackPressed() {

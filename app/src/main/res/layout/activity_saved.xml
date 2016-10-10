@@ -1,32 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.SavedActivity">
+    android:layout_height="match_parent">
 
-    <ListView
-        android:id="@+id/listview_saved_articles"
+
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </ListView>
+        android:layout_height="match_parent"
+        tools:context=".ui.SavedActivity">
 
-    <TextView
-        android:id="@+id/empty_view_saved"
-        android:textColor="@android:color/black"
-        android:textSize="20sp"
-        android:text="No articles found"
-        android:layout_gravity="center"
+        <ListView
+            android:id="@+id/listview_saved_articles"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </ListView>
+
+        <TextView
+            android:id="@+id/empty_view_saved"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:text="No articles found"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ProgressBar
+            android:id="@+id/saved_progress_bar"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+
+    </FrameLayout>
+
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView_saved"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id_saved"/>
 
-    <ProgressBar
-        android:id="@+id/saved_progress_bar"
-        android:visibility="gone"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-
-
-</FrameLayout>
+</RelativeLayout>

@@ -5,6 +5,7 @@
     android:gravity="bottom"
     android:orientation="vertical"
     android:paddingBottom="3dp"
+    android:id="@+id/nav_header_main"
     android:background="@drawable/side_nav_bar"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"

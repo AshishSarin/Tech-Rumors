@@ -20,6 +20,7 @@ public abstract class EndlessScrollListener implements AbsListView.OnScrollListe
 
     public static boolean loadingFailed;
 
+
     public EndlessScrollListener() {
     }
 
@@ -40,6 +41,7 @@ public abstract class EndlessScrollListener implements AbsListView.OnScrollListe
     public void onScroll(AbsListView view, int firstVisibleItem,
                            int visibleItemCount, int totalItemCount)
     {
+
         totalItemCount--;
         // This is done to check if loading is failed because of network
         // if loading is failed then listener tries to re-query the same data again
@@ -48,6 +50,7 @@ public abstract class EndlessScrollListener implements AbsListView.OnScrollListe
             loading = false;
             loadingFailed = false;
         }
+
         // If the total item count is zero and the previous isn't, assume the
         // list is invalidated and should be reset back to initial state
         if (totalItemCount < previousTotalItemCount) {
@@ -70,6 +73,8 @@ public abstract class EndlessScrollListener implements AbsListView.OnScrollListe
         if (!loading && (firstVisibleItem + visibleItemCount + visibleThreshold) >= totalItemCount ) {
             loading = onLoadMore(currentPage + 1, totalItemCount);
         }
+
+
     }
 
     // Defines the process for actually loading more data based on page

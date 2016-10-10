@@ -1,74 +1,92 @@
-<ScrollView
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <ScrollView
+       android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
 
-    <!-- TODO: Update blank fragment layout -->
-    <LinearLayout
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-
-        <TextView
-            android:id="@+id/detail_title"
-            android:layout_marginTop="10dp"
-            android:text="@string/demo_title"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-
+        <!-- TODO: Update blank fragment layout -->
         <LinearLayout
-            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginRight="20dp"
             android:layout_marginBottom="10dp"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
 
 
             <TextView
-                android:textSize="15sp"
+                android:id="@+id/detail_title"
+                android:layout_marginTop="10dp"
+                android:text="@string/demo_title"
                 android:textColor="@android:color/black"
+                android:textSize="20sp"
                 android:textStyle="bold"
-                android:id="@+id/detail_author_name"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/detail_post_date"
-                android:textSize="15sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+
+                <TextView
+                    android:textSize="15sp"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    android:id="@+id/detail_author_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/detail_post_date"
+                    android:textSize="15sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/yt_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </FrameLayout>
+
+
+            <com.sareen.squarelabs.techrumors.HTMLParser.HtmlTextView
+                android:layout_marginTop="10dp"
+                android:id="@+id/detail_text"
+                android:textColor="@android:color/black"
+                android:lineSpacingExtra="3dp"
+                android:textSize="18sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@android:style/TextAppearance.Small" />
 
         </LinearLayout>
 
-        <FrameLayout
-            android:id="@+id/yt_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </FrameLayout>
 
 
-        <com.sareen.squarelabs.techrumors.HTMLParser.HtmlTextView
-            android:layout_marginTop="10dp"
-            android:id="@+id/detail_text"
-            android:textColor="@android:color/black"
-            android:lineSpacingExtra="3dp"
-            android:textSize="18sp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textAppearance="@android:style/TextAppearance.Small" />
+    </ScrollView>
 
-    </LinearLayout>
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView_detail"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id_detail"/>
 
-</ScrollView>
+</RelativeLayout>

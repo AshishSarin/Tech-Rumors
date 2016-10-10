@@ -14,6 +14,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.sareen.squarelabs.techrumors.R;
 import com.sareen.squarelabs.techrumors.Utility.Utility;
 import com.sareen.squarelabs.techrumors.adapters.SavedPostsAdapter;
@@ -41,11 +44,15 @@ public class SavedActivity extends AppCompatActivity
 
     private ProgressBar savedProgressBar;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saved);
+
+        intializeAds();
 
         savedProgressBar = (ProgressBar)findViewById(R.id.saved_progress_bar);
 
@@ -70,6 +77,18 @@ public class SavedActivity extends AppCompatActivity
             actionBar.setElevation(0f);
         }
 
+
+
+    }
+
+    private void intializeAds()
+    {
+        MobileAds.initialize
+                (getApplicationContext(),
+                        "ca-app-pub-2077732222500987~6301066550");
+        AdView mAdView = (AdView) findViewById(R.id.adView_saved);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
 
     @Override

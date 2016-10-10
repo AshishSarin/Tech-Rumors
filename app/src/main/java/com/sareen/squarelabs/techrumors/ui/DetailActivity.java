@@ -22,6 +22,9 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.sareen.squarelabs.techrumors.HTMLParser.HtmlLocalImageGetter;
@@ -80,7 +83,7 @@ public class DetailActivity extends AppCompatActivity
     private long post_db_id = -1;
 
 
-    // This list temporarily store the bitmap,
+    // This list temporarily store the postTitleBitmap,
     // for if user asks for storing post in saved articles
     private static ArrayList<Bitmap> detailBitmapList;
     private boolean showSaveOption;
@@ -90,6 +93,8 @@ public class DetailActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        intializeAds();
 
         isSaved = false;
         showSaveOption = true; // keeping it true initially
@@ -123,6 +128,8 @@ public class DetailActivity extends AppCompatActivity
         }
 
     }
+
+
 
     // This method is called when only id of post
     // saved in database is sent from saved activity
@@ -304,6 +311,15 @@ public class DetailActivity extends AppCompatActivity
         setTitle(activityTitle);
     }
 
+    private void intializeAds()
+    {
+        MobileAds.initialize
+                (getApplicationContext(),
+                        "ca-app-pub-2077732222500987~6301066550");
+        AdView mAdView = (AdView) findViewById(R.id.adView_detail);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
@@ -389,7 +405,7 @@ public class DetailActivity extends AppCompatActivity
         {
 
             out = new FileOutputStream(imagePath);
-            Utility.bitmap
+            Utility.postTitleBitmap
                     .compress(Bitmap.CompressFormat.JPEG, 100, out);
 
         }
