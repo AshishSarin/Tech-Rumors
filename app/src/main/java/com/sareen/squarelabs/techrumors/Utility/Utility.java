@@ -20,7 +20,7 @@ public class Utility
     public static final String POST_URL = "post_url";
     public static final String POST_CATEGORY = "post_cat";
 
-    public static Bitmap bitmap;
+    public static Bitmap postTitleBitmap;
 
 
     // These codes are passed to detail activity

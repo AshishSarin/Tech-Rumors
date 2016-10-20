@@ -25,7 +25,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.sareen.squarelabs.techrumors.R;
@@ -82,9 +81,6 @@ public class HtmlLocalImageGetter implements Html.ImageGetter
             d = new BitmapDrawable(context.getResources(), bitmap);
             float scale = getScale(d);
             d.setBounds(0, 0, (int) (d.getIntrinsicWidth() * scale), (int) (d.getIntrinsicHeight() * scale));
-            Log.e("imageListSize: " , imagePathList.size()+"");
-            Log.e("COUNT: " , count+"");
-            Log.e("ImagePath: ", imagePath.toString());
 
         }
 
