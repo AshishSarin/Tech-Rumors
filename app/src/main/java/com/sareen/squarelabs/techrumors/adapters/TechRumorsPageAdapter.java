@@ -31,9 +31,9 @@ public class TechRumorsPageAdapter extends FragmentPagerAdapter
             case 3:
                 return "News";
             case 4:
-                return "Rumors";
+                return "Mobile Videos";
             case 5:
-                return "Videos";
+                return "Tech Videos";
             default:
                 return "Top Stories";
 
@@ -54,7 +54,7 @@ public class TechRumorsPageAdapter extends FragmentPagerAdapter
             case 3:
                 return TechNewsFragment.newInstance("tech-news");
             case 4:
-                return TechNewsFragment.newInstance("tech-rumors");
+                return TechNewsFragment.newInstance("mobile-videos");
             case 5:
                 return TechNewsFragment.newInstance("tech-videos");
             default:
